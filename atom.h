@@ -12,5 +12,5 @@ struct Atom
 };
 
 void ZapiszKlatkeXYZ (std::ostream &os, const std::vector<Atom> &atomy, double ts);
-
+void ZapiszPredkosci (std::ostream &os, const std::vector<Atom> &atomy);
 #endif
