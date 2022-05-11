@@ -28,32 +28,30 @@ Wektor3D SilaLJ (const Atom &o1, const Atom &o2)
 int main()
 {
 	vector<Atom> atomy = GenerujKrysztalFCC (m, 5.256e-10, 5, 5, 5, 40);
-	double dt=1e-12;
-	for (double t=0; t<1e-10; t+=dt)
+	double dt=5e-15;
+	double t=0;
+	for (unsigned i=0; i<2e4; i++)
 	{
 		vector <Wektor3D> Fw (atomy.size());
 		for (unsigned a1=1; a1<atomy.size(); a1++)
+		for(unsigned a2=0; a2<a1; a2++)
 		{
-			
-			for(unsigned a2=0; a2<a1; a2++)
-			{
 				Wektor3D F = SilaLJ (atomy[a1], atomy[a2]);
 				Fw[a1] = Fw[a1] - F;
 				Fw[a2] = Fw[a2] + F;
-			}
-		
+		}
 			for(unsigned a1 =0; a1<atomy.size(); a1++)
 			{
-
-				atomy[a1].s.x += atomy[a1].v.x *dt;
 				atomy[a1].v.x += Fw[a1].x / atomy[a1].m * dt;
-				atomy[a1].s.y += atomy[a1].v.y *dt;
+				atomy[a1].s.x += atomy[a1].v.x *dt;
 				atomy[a1].v.y += Fw[a1].y / atomy[a1].m *dt;
-				atomy[a1].s.z += atomy[a1].v.z*dt;
+				atomy[a1].s.y += atomy[a1].v.y *dt;
 				atomy[a1].v.z += Fw[a1].z / atomy[a1].m * dt;
-			}
-		}				
-		ZapiszKlatkeXYZ (cout, atomy, t*1000000000000);
+				atomy[a1].s.z += atomy[a1].v.z*dt;
+			}				
+		if (i%200==0)
+		ZapiszKlatkeXYZ (cout, atomy, t*1e15);
+		t+=dt;
 	}
 	
 
@@ -61,50 +59,3 @@ int main()
 	ZapiszPredkosci (plik, atomy);
 	plik.close();
 }
-
-
-
-
-
-/*
-
-for(int i=0; i<=3000000; i++)
-	{
-		/*if (i % 50 == 0)
-		{
-			printf("%lf\t" , t);
-			for(unsigned p1=1; p1<planety.size(); p1++)
-				cout << planety[p1].s << '\t';
-			printf("\n");
-		} 
-		
-		
-		if (i % 100 ==0)
-		{
-				rysuj(planety);
-				rest(5);
-		}
-		vector <Wektor2D> Fw (planety.size());
-		for(unsigned p1=1; p1<planety.size(); p1++)
-		{
-		
-			for(unsigned p2=0; p2<p1; p2++)
-				{
-					Wektor2D F = SilaGrawitacji(planety[p1],planety[p2]);
-					Fw[p1] = Fw[p1] - F;
-					Fw[p2] = Fw[p2] + F;
-				}
-			for(unsigned p1=0; p1<planety.size(); p1++)
-			{
-				planety[p1].v.x += Fw[p1].x / planety[p1].m * dt;
-				planety[p1].v.y += Fw[p1].y / planety[p1].m * dt;
-				planety[p1].s.x += planety[p1].v.x * dt;
-				planety[p1].s.y += planety[p1].v.y * dt;
-			}
-			t += dt;
-		}
-	}
-}
-
-
-*/
